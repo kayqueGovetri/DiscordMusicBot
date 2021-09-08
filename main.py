@@ -10,6 +10,7 @@ intents.members = True
 
 
 TOKEN = os.getenv('DISCORD_TOKEN')
+print(f"O TOKEN É {TOKEN}")
 queues = {}
 
 client = commands.Bot(command_prefix="!", intents=intents)
