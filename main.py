@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from discord import FFmpegPCMAudio
-from dotenv import load_dotenv
 import os
 import youtube_dl
 from discord.utils import get
@@ -9,7 +8,6 @@ from discord.utils import get
 intents = discord.Intents.default()
 intents.members = True
 
-load_dotenv()
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 queues = {}
