@@ -9,7 +9,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 
-TOKEN = "ODgzMzkzNzAxMzM2OTc3NDI4.YTJSfw.0MdvGD36P3NyV4Jpj4tzajWdHZ0"
+TOKEN = os.getenv('DISCORD_TOKEN')
 print(f"O TOKEN É {TOKEN}")
 queues = {}
 
