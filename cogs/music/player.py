@@ -1,6 +1,7 @@
 import wavelink
 from .queue import Queue
-from errors.exceptions import AlredyConnectedToChannel, NoVoiceChannel, QueueIsEmpty, NotTracksFound
+from errors.exceptions import AlredyConnectedToChannel, NoVoiceChannel, \
+    QueueIsEmpty, NotTracksFound
 
 
 class Player(wavelink.Player):

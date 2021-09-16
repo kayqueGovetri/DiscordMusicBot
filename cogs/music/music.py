@@ -33,7 +33,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
     async def cog_check(self, ctx):
         if isinstance(ctx.channel, discord.DMChannel):
-            await ctx.send("Os comandos de música não estão disponíveis em DMs.")
+            await ctx.send("Os comandos de música não estão disponíveis em "
+                           "DMs.")
             return False
         return True
 
@@ -57,12 +58,14 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
     def get_player(self, obj):
         if isinstance(obj, commands.Context):
-            return self.wavelink.get_player(obj.guild.id, cls=player.Player, context=obj)
+            return self.wavelink.get_player(obj.guild.id, cls=player.Player,
+                                            context=obj)
         elif isinstance(obj, discord.Guild):
             return self.wavelink.get_player(obj.id, cls=player.Player)
 
     @commands.command(name="connect", aliases=["join"])
-    async def connect_command(self, ctx, *, channel: t.Optional[discord.VoiceChannel]):
+    async def connect_command(self, ctx, *,
+                              channel: t.Optional[discord.VoiceChannel]):
         player = self.get_player(ctx)
         channel = await player.connect(ctx, channel)
         await ctx.send(f"Conectado a {channel.name}.")
