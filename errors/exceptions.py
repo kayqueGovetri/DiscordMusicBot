@@ -15,3 +15,11 @@ class NoVoiceChannel(CommandError):
 
 class NotTracksFound(CommandError):
     pass
+
+
+class PlayerIsAlreadyPaused(CommandError):
+    pass
+
+
+class PlayerIsAlreadyPlaying(CommandError):
+    pass

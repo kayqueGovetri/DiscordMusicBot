@@ -7,7 +7,7 @@ from discord.ext import commands
 from constants import URL_REGEX
 from . import player
 from errors.exceptions import AlredyConnectedToChannel, NoVoiceChannel, \
-    QueueIsEmpty
+    QueueIsEmpty, PlayerIsAlreadyPaused, PlayerIsAlreadyPlaying
 from embeds.embeds_queue_command import EmbedQueueCommand
 
 
@@ -93,7 +93,11 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await player.connect(ctx)
 
         if query is None:
-            pass
+            if player.queue.is_empty:
+                raise QueueIsEmpty
+
+            await player.set_pause(False)
+            await ctx.send("O player está voltando a tocar.")
 
         else:
             query = query.strip("<>")
@@ -101,6 +105,13 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 query = f"ytsearch:{query}"
 
             await player.add_tracks(ctx, await self.wavelink.get_tracks(query))
+
+    @play_command.error
+    async def play_command_error(self, ctx, exc):
+        if isinstance(exc, PlayerIsAlreadyPlaying):
+            await ctx.send("Player já está tocando.")
+        elif isinstance(exc, QueueIsEmpty):
+            await ctx.send("Não há mais músicas para tocar")
 
     @commands.command(name="queue")
     async def queue_command(self, ctx, *, show: t.Optional[int] = 10):
@@ -121,6 +132,30 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     async def queue_command_error(self, ctx, exc):
         if isinstance(exc, QueueIsEmpty):
             await ctx.send("A fila atualmente está vazia.")
+
+    @commands.command(name="pause")
+    async def pause_command(self, ctx):
+        player = self.get_player(ctx)
+
+        if player.is_paused:
+            raise PlayerIsAlreadyPaused
+
+        await player.set_pause(True)
+        await ctx.send("O player foi pausado")
+
+    @commands.command(name="stop")
+    async def stop_command(self, ctx):
+        player = self.get_player(ctx)
+
+        player.queue.empty()
+        await player.stop()
+
+        await ctx.send("O player foi parou")
+
+    @pause_command.error
+    async def pause_command_error(self, ctx, exc):
+        if isinstance(exc, PlayerIsAlreadyPaused):
+            await ctx.send("O player já está pausado")
 
     async def on_error(self, err, *args, **kwargs):
         raise
