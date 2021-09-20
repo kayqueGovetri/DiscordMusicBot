@@ -19,6 +19,31 @@ class Queue:
             raise QueueIsEmpty
         return self._queue[0]
 
+    @property
+    def current_track(self):
+        if not self._queue:
+            raise QueueIsEmpty
+        return self._queue[self.position]
+
+    @property
+    def upcoming(self):
+        if not self._queue:
+            raise QueueIsEmpty
+        return self._queue[self.position + 1:]
+
+    @property
+    def history(self):
+        if not self._queue:
+            raise QueueIsEmpty
+        return self._queue[:self.position]
+
+    @property
+    def length(self):
+        return len(self._queue)
+
+    def empty(self):
+        self._queue.clear()
+
     def get_next_track(self):
         if not self._queue:
             raise QueueIsEmpty

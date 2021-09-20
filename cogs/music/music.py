@@ -6,7 +6,9 @@ import wavelink
 from discord.ext import commands
 from constants import URL_REGEX
 from . import player
-from errors.exceptions import AlredyConnectedToChannel, NoVoiceChannel
+from errors.exceptions import AlredyConnectedToChannel, NoVoiceChannel, \
+    QueueIsEmpty
+from embeds.embeds_queue_command import EmbedQueueCommand
 
 
 class Music(commands.Cog, wavelink.WavelinkMixin):
@@ -99,6 +101,32 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 query = f"ytsearch:{query}"
 
             await player.add_tracks(ctx, await self.wavelink.get_tracks(query))
+
+    @commands.command(name="queue")
+    async def queue_command(self, ctx, *, show: t.Optional[int] = 10):
+        player = self.get_player(ctx)
+
+        if player.queue.is_empty:
+            raise QueueIsEmpty
+
+        embed_queue_command = EmbedQueueCommand(
+            ctx=ctx,
+            player=player,
+            show=show
+        )
+        msg = await embed_queue_command.send_embed()
+        print(msg)
+
+    @queue_command.error
+    async def queue_command_error(self, ctx, exc):
+        if isinstance(exc, QueueIsEmpty):
+            await ctx.send("A fila atualmente está vazia.")
+
+    async def on_error(self, err, *args, **kwargs):
+        raise
+
+    async def on_commanderror(self, ctx, exc):
+        raise setattr(exc, "original", exc)
 
 
 def setup(bot):
