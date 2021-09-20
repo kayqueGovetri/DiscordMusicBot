@@ -7,7 +7,8 @@ from discord.ext import commands
 from constants import URL_REGEX
 from . import player
 from errors.exceptions import AlredyConnectedToChannel, NoVoiceChannel, \
-    QueueIsEmpty, PlayerIsAlreadyPaused, PlayerIsAlreadyPlaying
+    QueueIsEmpty, PlayerIsAlreadyPaused, PlayerIsAlreadyPlaying, \
+    NoMoreTracks, NoPreviousTracks
 from embeds.embeds_queue_command import EmbedQueueCommand
 
 
@@ -151,6 +152,41 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         await player.stop()
 
         await ctx.send("O player foi parou")
+
+    @commands.command(name="next", aliases=["skip"])
+    async def next_command(self, ctx):
+        player = self.get_player(ctx)
+
+        if not player.queue.upcoming:
+            raise NoMoreTracks
+
+        await player.stop()
+        await ctx.send("Tocando a proxima música da fila")
+
+    @commands.command(name="previous")
+    async def previous_command(self, ctx):
+        player = self.get_player(ctx)
+
+        if not player.queue.history:
+            raise NoPreviousTracks
+
+        player.queue.position -= 2
+        await player.stop()
+        await ctx.send("Tocando a música anterior da fila")
+
+    @next_command.error
+    async def next_command_error(self, ctx, exc):
+        if isinstance(exc, QueueIsEmpty):
+            await ctx.send("A fila já está vazia, não há próxima música.")
+        elif isinstance(exc, NoMoreTracks):
+            await ctx.send("Não a nenhuma música após essa na fila.")
+
+    @previous_command.error
+    async def previous_command_error(self, ctx, exc):
+        if isinstance(exc, QueueIsEmpty):
+            await ctx.send("A fila já está vazia, não há próxima música.")
+        elif isinstance(exc, NoPreviousTracks):
+            await ctx.send("Não a nenhuma música na fila.")
 
     @pause_command.error
     async def pause_command_error(self, ctx, exc):
