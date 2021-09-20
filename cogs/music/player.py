@@ -42,7 +42,7 @@ class Player(wavelink.Player):
                 self.queue.add(track)
                 await ctx.send(f"Adicionado {track.title} na fila.")
 
-        if not self.is_playing:
+        if not self.is_playing and not self.queue.is_empty:
             await self.start_playback()
 
     async def choose_track(self, ctx, tracks):

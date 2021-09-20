@@ -10,6 +10,10 @@ class Queue:
         self._queue.extend(args)
 
     @property
+    def is_empty(self):
+        return not self._queue
+
+    @property
     def first_track(self):
         if not self._queue:
             raise QueueIsEmpty
