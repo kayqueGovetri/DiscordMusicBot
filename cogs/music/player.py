@@ -29,6 +29,7 @@ class Player(wavelink.Player):
             pass
 
     async def add_tracks(self, ctx, tracks):
+        print(tracks)
         if not tracks:
             raise NotTracksFound
         if isinstance(tracks, wavelink.TrackPlaylist):

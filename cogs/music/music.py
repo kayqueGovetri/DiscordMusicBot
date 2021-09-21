@@ -2,7 +2,9 @@ import re
 import typing as t
 import discord
 import wavelink
+import os
 
+from dotenv import load_dotenv
 from discord.ext import commands
 from constants import URL_REGEX
 from . import player
@@ -10,6 +12,15 @@ from errors.exceptions import AlredyConnectedToChannel, NoVoiceChannel, \
     QueueIsEmpty, PlayerIsAlreadyPaused, PlayerIsAlreadyPlaying, \
     NoMoreTracks, NoPreviousTracks
 from embeds.embeds_queue_command import EmbedQueueCommand
+
+load_dotenv()
+LAVALINK_HOST = os.getenv('LAVALINK_HOST')
+LAVALINK_URL = os.getenv('LAVALINK_URL')
+SECURE = os.getenv("SECURE")
+LAVALINK_PASSWORD = os.getenv("LAVALINK_PASSWORD")
+LAVALINK_PORT = int(os.getenv("LAVALINK_PORT"))
+LAVALINK_IDENTIFIER = os.getenv("LAVALINK_IDENTIFIER")
+LAVALINK_REGION = os.getenv("LAVALINK_REGION")
 
 
 class Music(commands.Cog, wavelink.WavelinkMixin):
@@ -46,13 +57,12 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
         nodes = {
             "MAIN": {
-                "host": "127.0.0.1",
-                "port": 2333,
-                "rest_uri": "http://127.0.0.1:2333",
-                "password": "youshallnotpass",
-                "identifier": "MAIN",
-                "region": "europe",
-                "secure": False
+                "host": LAVALINK_HOST,
+                "port": int(LAVALINK_PORT),
+                "rest_uri": LAVALINK_URL,
+                "password": LAVALINK_PASSWORD,
+                "identifier": LAVALINK_IDENTIFIER,
+                "region": LAVALINK_REGION,
             }
         }
 
@@ -104,8 +114,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             query = query.strip("<>")
             if not re.match(URL_REGEX, query):
                 query = f"ytsearch:{query}"
-
-            await player.add_tracks(ctx, await self.wavelink.get_tracks(query))
+            teste = await self.wavelink.get_tracks(query)
+            await player.add_tracks(ctx, teste)
 
     @play_command.error
     async def play_command_error(self, ctx, exc):
