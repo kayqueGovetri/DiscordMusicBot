@@ -5,6 +5,6 @@ from bot import Bot
 load_dotenv()
 
 TOKEN = os.getenv('DISCORD_TOKEN')
-
+print(TOKEN)
 bot = Bot()
 bot.run(TOKEN)
