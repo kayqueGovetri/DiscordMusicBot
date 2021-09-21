@@ -22,6 +22,14 @@ LAVALINK_PORT = int(os.getenv("LAVALINK_PORT"))
 LAVALINK_IDENTIFIER = os.getenv("LAVALINK_IDENTIFIER")
 LAVALINK_REGION = os.getenv("LAVALINK_REGION")
 
+print(f"{LAVALINK_HOST}")
+print(f"{LAVALINK_URL}")
+print(f"{SECURE}")
+print(f"{LAVALINK_PASSWORD}")
+print(f"{LAVALINK_PORT}")
+print(f"{LAVALINK_IDENTIFIER}")
+print(f"{LAVALINK_REGION}")
+
 
 class Music(commands.Cog, wavelink.WavelinkMixin):
     def __init__(self, bot):
