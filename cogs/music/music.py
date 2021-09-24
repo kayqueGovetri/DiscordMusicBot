@@ -174,7 +174,6 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     @commands.command(name="stop")
     async def stop_command(self, ctx):
         player = self.get_player(ctx)
-
         await player.stop()
 
         await ctx.send("O player foi parou")
