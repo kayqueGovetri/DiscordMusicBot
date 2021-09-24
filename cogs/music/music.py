@@ -110,9 +110,9 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
     @commands.command(name="play")
     async def play_command(self, ctx, *, query: t.Optional[str]):
-        player = self.get_player(ctx)
-
-        if not player.node.available:
+        try:
+            player = self.get_player(ctx)
+        except wavelink.errors.ZeroConnectedNodes:
             await self.bot.loop.create_task(self.start_nodes())
             player = self.get_player(ctx)
 
