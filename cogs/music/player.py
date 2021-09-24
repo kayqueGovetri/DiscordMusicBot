@@ -29,14 +29,10 @@ class Player(wavelink.Player):
             pass
 
     async def add_tracks(self, ctx, tracks):
-        print(tracks)
         if not tracks:
             raise NotTracksFound
         if isinstance(tracks, wavelink.TrackPlaylist):
             self.queue.add(*tracks.tracks)
-        elif len(tracks) == 1:
-            self.queue.add(tracks[0])
-            await ctx.send(f"Adicionado {tracks[0].title} a fila.")
         else:
             track = tracks[0]
             if (track != await self.choose_track(ctx, tracks)) is not None:
