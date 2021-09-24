@@ -23,7 +23,10 @@ class Queue:
     def current_track(self):
         if not self._queue:
             raise QueueIsEmpty
-        return self._queue[self.position]
+        try:
+            return self._queue[self.position]
+        except IndexError:
+            return None
 
     @property
     def upcoming(self):

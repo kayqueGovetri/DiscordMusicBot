@@ -53,6 +53,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     async def on_player_stop(self, node, payload):
         await payload.player.advance()
 
+    @wavelink.WavelinkMixin.listener("on_websocket_closed")
+    async def on_websocket_closed(self, node, payload):
+        self.bot.loop.create_task(self.start_nodes())
+
     async def cog_check(self, ctx):
         if isinstance(ctx.channel, discord.DMChannel):
             await ctx.send("Os comandos de música não estão disponíveis em "
@@ -107,6 +111,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     @commands.command(name="play")
     async def play_command(self, ctx, *, query: t.Optional[str]):
         player = self.get_player(ctx)
+
+        if not player.node.available:
+            await self.bot.loop.create_task(self.start_nodes())
+            player = self.get_player(ctx)
 
         if not player.is_connected:
             await player.connect(ctx)

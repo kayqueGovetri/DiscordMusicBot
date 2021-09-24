@@ -17,7 +17,11 @@ class EmbedQueueCommand:
         )
         display_name = self.ctx.author.display_name
         avatar_url = self.ctx.author.avatar_url
-        current_track_title = self.player.queue.current_track.title
+        if self.player.queue.current_track:
+            current_track_title = self.player.queue.current_track.title
+        else:
+            current_track_title = "Não está tocando nenhuma música."
+
         queue_upcoming = self.player.queue.upcoming
 
         embed.set_author(name="Resultado da pesquisa")
