@@ -55,6 +55,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
     @wavelink.WavelinkMixin.listener("on_websocket_closed")
     async def on_websocket_closed(self, node, payload):
+        self.wavelink = wavelink.Client(bot=self.bot)
         self.bot.loop.create_task(self.start_nodes())
 
     async def cog_check(self, ctx):
