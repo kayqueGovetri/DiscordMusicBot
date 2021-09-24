@@ -184,6 +184,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player = self.get_player(ctx)
 
         if not player.queue.upcoming:
+            player.queue.clean_queue()
             raise NoMoreTracks
 
         await player.stop()

@@ -57,3 +57,6 @@ class Queue:
             return None
 
         return self._queue[self.position]
+
+    def clean_queue(self):
+        self._queue = []
