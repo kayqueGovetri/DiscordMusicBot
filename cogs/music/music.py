@@ -175,7 +175,6 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     async def stop_command(self, ctx):
         player = self.get_player(ctx)
 
-        player.queue.empty()
         await player.stop()
 
         await ctx.send("O player foi parou")
@@ -185,7 +184,6 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player = self.get_player(ctx)
 
         if not player.queue.upcoming:
-            player.queue.clean_queue()
             raise NoMoreTracks
 
         await player.stop()
