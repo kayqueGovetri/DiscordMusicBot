@@ -1,17 +1,18 @@
 from discord.ext import commands
-from cogs.music.music import Music
+
+from cogs.music.player import Player
 
 
 class Bot(commands.Bot):
     def __init__(self):
-        super(Bot, self).__init__(command_prefix=['!'])
-        self.add_cog(Music(self))
+        super(Bot, self).__init__(command_prefix=["!"])
+        self.add_cog(Player(self))
         self.client_id = None
 
     async def on_ready(self):
         self.client_id = (await self.application_info()).id
         print("O bot está pronto!")
-        print(f'Logado como username: {self.user.name} | id: {self.user.id}')
+        print(f"Logado como username: {self.user.name} | id: {self.user.id}")
 
     async def close(self):
         print("Fechando na interrupção do teclado...")
@@ -19,7 +20,6 @@ class Bot(commands.Bot):
 
     async def on_connect(self):
         print(f"Conectado ao Discord (latência: {self.latency*1000:,.0f} ms).")
-        print(self.get_all_channels())
 
     async def on_resumed(self):
         print("O bot foi retomado.")
