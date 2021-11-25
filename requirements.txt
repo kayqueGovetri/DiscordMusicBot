@@ -13,3 +13,8 @@ six==1.16.0
 typing-extensions==3.10.0.2
 yarl==1.6.3
 youtube-dl==2021.6.6
+google-api-core==2.2.2
+google-api-python-client==2.31.0
+google-auth==2.3.3
+google-auth-httplib2==0.1.0
+googleapis-common-protos==1.53.0
